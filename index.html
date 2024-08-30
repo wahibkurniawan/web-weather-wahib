@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ramalan cuaca Indonesia</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Ramalan Cuaca Indonesia</h1>
+        <div class="theme-switch-wrapper">
+          <label class="switch">
+            <input type="checkbox" id="theme-toggle" />
+            <span class="slider round"></span>
+          </label>
+          <span id="theme-label"></span>
+        </div>
+      </header>
+      <div class="loader" id="loader" style="display: none"></div>
+      <div id="search-container">
+        <input
+          type="text"
+          id="nama-kota"
+          placeholder="Masukan Nama Kota"
+          onclick="clearInput()"
+        />
+        <button id="btn-search" onclick="cariKota()" type="button">Cari</button>
+        <ul id="suggestions" class="suggestions-list"></ul>
+      </div>
+
+      <main class="box-utama">
+        <div class="box-ab no-a">
+          <h4>Prakiraan Cuaca Hari Ini</h4>
+          <div class="cuaca-utama" id="cuaca-current">
+            <p id="current-day"></p>
+            <p id="latitude"></p>
+            <p id="longitude"></p>
+            <p id="current-time"></p>
+            <p id="weather-indicator"></p>
+          </div>
+        </div>
+        <div class="box-ab no-b">
+          <h3>Forcasting Week</h3>
+          <div class="daily day1"></div>
+          <div class="daily day2"></div>
+          <div class="daily day3"></div>
+          <div class="daily day4"></div>
+          <div class="daily day5"></div>
+          <div class="daily day6"></div>
+          <div class="daily day7"></div>
+        </div>
+      </main>
+      <div class="title"><h2>Deskripsi</h2></div>
+      <div class="box-desc">
+        <div class="box no1"><h4>Suhu °C</h4></div>
+        <div class="box no2"><h4>Kelembapan</h4></div>
+        <div class="box no3"><h4>Arah Angin</h4></div>
+        <div class="box no4"><h4>Kecepatan Angin</h4></div>
+      </div>
+      <button class="show-button" onclick="showWeatherInfo()">
+        Lihat Informasi Cuaca
+      </button>
+      <div class="weather-info show-info" id="weatherInfo">
+        <h2>Information Indikator Cuaca:</h2>
+        <p>
+          <strong>Hujan Lebat:</strong> Terjadi ketika suhu minimum di bawah
+          25°C dan suhu maksimum tidak melebihi 28°C, dengan kelembapan di atas
+          90%, dan kecepatan angin lebih dari 20 km/jam. Arah angin umumnya dari
+          barat atau barat daya.
+        </p>
+
+        <p>
+          <strong>Hujan:</strong> Terjadi ketika suhu minimum antara 20°C dan
+          25°C, suhu maksimum tidak melebihi 28°C, kelembapan di atas 80%, dan
+          kecepatan angin berkisar antara 10 km/jam hingga 20 km/jam. Arah angin
+          biasanya dari barat atau barat daya.
+        </p>
+
+        <p>
+          <strong>Mendung Tebal:</strong> Terjadi ketika suhu minimum antara
+          22°C dan 25°C, suhu maksimum tidak melebihi 28°C, kelembapan di atas
+          75%, dan kecepatan angin berkisar antara 15 km/jam hingga 20 km/jam.
+          Arah angin cenderung dari barat daya.
+        </p>
+
+        <p>
+          <strong>Mendung:</strong> Terjadi ketika suhu minimum di atas 25°C dan
+          suhu maksimum tidak melebihi 30°C, kelembapan di atas 65%, dan
+          kecepatan angin di bawah 15 km/jam. Arah angin umumnya dari selatan
+          atau tenggara.
+        </p>
+
+        <p>
+          <strong>Panas Terik:</strong> Terjadi ketika suhu maksimum melebihi
+          35°C, kelembapan di bawah 40%, dan kecepatan angin kurang dari 10
+          km/jam. Arah angin cenderung dari utara atau timur laut.
+        </p>
+
+        <p>
+          <strong>Cerah:</strong> Terjadi ketika suhu maksimum berada antara
+          30°C dan 33°C, kelembapan di bawah 50%, dan kecepatan angin kurang
+          dari 10 km/jam. Arah angin biasanya dari timur atau timur laut.
+        </p>
+
+        <p>
+          <strong>Berawan:</strong> Terjadi ketika suhu minimum di atas 25°C dan
+          suhu maksimum tidak melebihi 30°C, kelembapan antara 50% hingga 80%,
+          dan kecepatan angin di bawah 15 km/jam. Arah angin cenderung dari
+          timur atau tenggara.
+        </p>
+
+        <p>
+          <strong>Mendung Berangin:</strong> Terjadi ketika suhu berada antara
+          20°C hingga 30°C, kelembapan di atas 60%, dan kecepatan angin lebih
+          dari 20 km/jam. Arah angin biasanya dari barat daya atau selatan.
+        </p>
+
+        <p>
+          <strong>Cerah Berangin:</strong> Terjadi ketika suhu minimum di atas
+          25°C, suhu maksimum tidak melebihi 33°C, kelembapan di bawah 40%, dan
+          kecepatan angin lebih dari 15 km/jam. Arah angin cenderung dari utara
+          atau timur laut.
+        </p>
+
+        <p>
+          <strong>Cerah Berawan:</strong> Terjadi ketika suhu di atas 25°C dan
+          kelembapan antara 40% hingga 60%, dengan kecepatan angin di bawah 15
+          km/jam. Arah angin umumnya dari timur atau tenggara.
+        </p>
+      </div>
+      <video autoplay muted loop id="background-video">
+        <source
+          src="./assets/air-terjun_2.mp4"
+          type="video/mp4"
+          id="video-source"
+        />
+      </video>
+      <footer>
+        <p>
+          Copyright &copy; 2024 By: Wahib Kurniawan, Student Batch 003,
+          Hacktiv8.
+        </p>
+      </footer>
+    </div>
+    <script src="./index.js"></script>
+  </body>
+</html>

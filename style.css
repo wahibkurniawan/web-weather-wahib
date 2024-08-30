@@ -1,0 +1,610 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+header {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+/*mengatur switch untuk tema, menempatkannya di pojok kanan atas dengan position absolute. */
+.theme-switch-wrapper { 
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 20px;
+}
+/* label untuk switch tema, dengan warna yang berubah berdasarkan mode (dark atau light). */
+#theme-label {
+  margin-left: 10px;
+  font-size: 16px;
+  color: #000;
+}
+
+body.dark-mode #theme-label {
+  color: #fff;
+}
+
+/* bagian tombol toggle */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 21px;
+}
+/* containernya toggle */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+/* element yang digunakan sebagai slider visual dari switch, dengan transisi haluss */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: -4px;
+  bottom: 1px;
+  background-color: white;
+  transition: 0.4s;
+}
+/* mengubah warna background slider dan menggerakkan lingkaran kecil saat switch diaktifkan. */
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.slider.round {
+  border-radius: 36px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+h1 {
+  margin-top: 5px;
+  font-size: 40px;
+  animation: fadeIn 1.5s ease-in-out;
+  flex-grow: 1;
+  text-align: center;
+  margin: 0;
+}
+/* container utama */
+.container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  background-image: none;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* effect Loading */
+.loader {
+  border: 7px solid #f3f3f3;
+  border-top: 7px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 7s linear infinite;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+/* mengatur animasi berputar secara berkelanjutan. */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* search container dan input*/
+#search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+#nama-kota {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  width: 200px;
+  box-sizing: border-box;
+  height: 40px;
+  border-right: none;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #000;
+}
+#nama-kota:focus {
+  outline: none;
+  border-color: #0056b3;
+}
+
+#btn-search {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 1px solid #007bff;
+  border-left: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+  height: 40px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#btn-search:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+/* suggestions List */
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid #ccc;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  z-index: 1000;
+  display: none;
+  opacity: 0; /* Mulai dengan transparansi */
+  transition: opacity 0.3s ease, background-color 0.3s ease; /* transisi */
+}
+
+.suggestions-list li {
+  padding: 8px;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.4);
+  color: #000;
+}
+
+.suggestions-list li:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* main content dan box layout*/
+main,
+.title,
+.box-desc,
+footer,
+.show-button {
+  visibility: hidden;
+}
+
+.box-utama {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 0.7fr 2fr;
+  width: 100%;
+  padding: 0px 20px;
+  height: 90%;
+}
+
+.box-ab {
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 2px solid gray;
+  border-radius: 7px;
+  margin: 20px;
+}
+
+.no-a {
+  font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.7);
+  background-size: 90px 90px;
+  background-position: right;
+  background-position-x: 95%;
+  background-repeat: no-repeat;
+  color: black;
+  width: 95%;
+}
+
+.no-a p {
+  font-size: 18px;
+  margin: 2px;
+  color: black;
+}
+
+.no-a h4 {
+  font-size: 24px;
+  margin: 10px;
+}
+
+.cuaca-utama {
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  text-align: left;
+  padding-left: 25px;
+}
+
+.no-b {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  z-index: 9;
+  padding: 5px 0;
+}
+
+.no-b h3 {
+  color: black;
+  margin-top: 10%;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* daily */
+.daily {
+  background-color: rgba(255, 255, 255, 0.5);
+  box-sizing: border-box;
+  text-align: left;
+  font-size: 11px;
+  height: 80%;
+  border: 2px solid gray;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 3px;
+  padding-left: 10px;
+  background-size: 54px 54px;
+  background-position: right;
+  background-position-x: 98%;
+  background-repeat: no-repeat;
+  transform: translateY(100px) scale(0.5) rotate(-15deg);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  gap: 10px;
+}
+
+.box-desc {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px 20px;
+  align-items: end;
+  margin: 10px;
+}
+
+.box {
+  color: black;
+  font-weight: 900;
+  padding-top: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  height: 100px;
+  width: 24%;
+  border-radius: 7px;
+  margin-bottom: 5px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 500;
+  padding-left: 14px;
+  padding-top: 12px;
+  margin: 20px;
+}
+
+.no1,
+.no2,
+.no3,
+.no4 {
+  background-repeat: no-repeat;
+  background-size: 100px 100px;
+  background-position: right;
+  background-position-x: 95%;
+}
+
+.no1 {
+  background-image: url(./assets/hot-trans.gif);
+}
+
+.no2 {
+  background-image: url(./assets/humidity-trans.gif);
+}
+
+.no3 {
+  background-image: url(./assets/compass-trans.gif);
+}
+
+.no4 {
+  background-image: url(./assets/wind-speed-trans.gif);
+}
+
+/* show button */
+.show-button {
+  display: block;
+  padding: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 10;
+}
+
+.show-button:hover {
+  background-color: #0056b3;
+}
+
+/* weather info */
+.weather-info {
+  text-align: left;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  top: 0;
+  right: 0;
+  margin: 20px;
+  display: none;
+}
+
+.weather-info h2 {
+  margin-top: 0;
+  font-size: 1.2em;
+}
+
+.weather-info p {
+  margin: 5px 0;
+}
+
+/* video background layout */
+#background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Menutupi seluruh layar dan menjaga proporsi */
+  z-index: -1; /* Video di belakang konten */
+}
+/* footer */
+footer {
+  display: flex;
+  margin-top: 10px;
+  padding: 3px 0;
+  font-size: 12px;
+  width: 100%;
+  background-color: rgb(27, 27, 27);
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  flex: 1;
+}
+
+/* animasi */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in {
+  animation: fadeIn 1.5s ease-in-out;
+}
+@keyframes slideInScaleRotate {
+  from {
+    opacity: 0;
+    transform: translateY(100px) scale(0.5) rotate(-15deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+.daily.animated {
+  animation: slideInScaleRotate 1s ease forwards;
+}
+
+/* dark mode */
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+body.dark-mode .no-a {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+body.dark-mode p {
+  color: white;
+}
+
+body.dark-mode .container::before {
+  background-image: none; /* menghilangkan background image pada pseudo-element */
+  background-color: rgba(0, 0, 0, 0);
+}
+
+body.dark-mode header {
+  background-color: rgba(0, 0, 0, 0);
+  color: #d2d2d2;
+}
+
+body.dark-mode input,
+body.dark-mode button,
+body.dark-mode .show-button {
+  background-color: #444444;
+  color: #ffffff;
+}
+body.dark-mode #nama-kota {
+  background-color: #333;
+  color: #fff;
+}
+
+body.dark-mode .suggestions-list {
+  background-color: #444;
+  color: #fff;
+  border-color: #555;
+}
+
+body.dark-mode .suggestions-list li {
+  background-color: #444;
+  color: #fff;
+}
+
+body.dark-mode .suggestions-list li:hover {
+  background-color: #555;
+}
+
+body.dark-mode .no-b,
+body.dark-mode .box-desc,
+body.dark-mode .weather-info {
+  background-color: rgba(0, 0, 0, 0);
+  color: #ffffff;
+}
+
+body.dark-mode .daily {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+body.dark-mode h3 {
+  color: white;
+}
+body.dark-mode .box {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+body.dark-mode footer {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #000;
+}
+
+/* media queries */
+@media (min-width: 1300px) {
+  h1 {
+    font-size: 48px;
+    margin: 14px;
+    padding: 8px;
+  }
+
+  .box-utama {
+    height: 100%;
+    padding: 0px 20px;
+  }
+
+  .no-a {
+    background-size: 170px 170px;
+    padding-left: 20px;
+  }
+
+  .no-a h4 {
+    padding-top: 12px;
+    font-size: 28px;
+    margin: 10px;
+  }
+
+  .no-a p {
+    font-size: 20px;
+  }
+  .no-b {
+    padding: 5px 0;
+    margin: 10px 0px;
+  }
+  .no-b h3 {
+    color: black;
+    margin-top: 20%;
+    font-size: 26px;
+    font-weight: 600;
+  }
+
+  .box-desc {
+    padding: 0px 20px;
+    margin: 20px;
+  }
+
+  .box-ab {
+    height: 90%;
+    margin: 18px 0;
+    padding: 10px;
+  }
+
+  .daily {
+    background-size: 80px 80px;
+    font-size: 13px;
+    height: 80%;
+    width: 80%;
+    margin: 20px 20px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+
+  .box {
+    margin: 30px 0;
+    padding: 30px 40px;
+    height: 180px;
+    width: 22%;
+    font-size: 18px;
+  }
+
+  .no1,
+  .no2,
+  .no3,
+  .no4 {
+    background-repeat: no-repeat;
+    background-size: 120px 120px;
+    background-position: right;
+    background-position-x: 95%;
+  }
+
+  footer {
+    font-size: 12px;
+    margin-top: 10px;
+    padding: 8px;
+    flex: 1;
+  }
+}
