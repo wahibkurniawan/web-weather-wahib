@@ -420,6 +420,7 @@ footer {
   align-items: center;
   color: #fff;
   flex: 1;
+  max-height: 20px;
 }
 
 /* animasi */
