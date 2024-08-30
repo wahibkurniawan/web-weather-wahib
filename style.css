@@ -103,7 +103,7 @@ h1 {
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
   background-image: none;
   text-align: center;
@@ -227,7 +227,8 @@ footer,
   grid-template-columns: 0.7fr 2fr;
   width: 100%;
   padding: 0px 20px;
-  height: 90%;
+  height: auto;
+  flex-grow: 1;
 }
 
 .box-ab {
@@ -419,9 +420,9 @@ footer {
   justify-content: center;
   align-items: center;
   color: #fff;
-  flex: 1;
-  max-height: 20px;
+  height: 30px;
 }
+
 
 /* animasi */
 @keyframes fadeIn {
