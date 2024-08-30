@@ -386,6 +386,7 @@ footer,
   right: 0;
   margin: 20px;
   display: none;
+  width: 94%;
 }
 
 .weather-info h2 {
